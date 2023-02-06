@@ -2,6 +2,8 @@ using System;
 using UnityEngine;
 using System.Collections;
 using Cinemachine;
+using static UnityEngine.Rendering.DebugUI;
+using static ADFeedbacks;
 
 [System.Serializable]
 public class ADFeedbacks : MonoBehaviour
@@ -42,7 +44,6 @@ public class ADFeedbacks : MonoBehaviour
         public float SFXVolume;
         public float SFXDeletionTime;
     }
-
     public bool CameraShake;
     [SerializeField]
     private CameraShakeSettings _cameraShakeSettings;
@@ -70,15 +71,23 @@ public class ADFeedbacks : MonoBehaviour
         get { return _sFXSettings; }
         set { _sFXSettings = value; }
     }
-
-
+    void OnValidate()
+    {
+        if (_cameraShakeSettings.isCinemachineCamera)
+        {
+            _cameraShakeSettings.CinemachineCameraShakeGO.gameObject.SetActive(true);
+        }
+        else
+        {
+            _cameraShakeSettings.CinemachineCameraShakeGO.gameObject.SetActive(false);
+        }
+    }
     public void Play()
     {
         if (CameraShake)
         {
             StartCoroutine(ShakeCamera(_cameraShakeSettings.CameraShakeGO, _cameraShakeSettings.CameraShakeTime, _cameraShakeSettings.CameraShakeIntensity));
         }
-
         if (VFX)
         {
             // Code to play VFX
@@ -89,7 +98,6 @@ public class ADFeedbacks : MonoBehaviour
             );
             StartCoroutine(DeleteVFXAfterTime(vfxInstance, _vFXSettings.VFXDeletionTime));
         }
-
         if (SFX)
         {
             // Code to play SFX
@@ -99,7 +107,6 @@ public class ADFeedbacks : MonoBehaviour
             audioSource.Play();
             StartCoroutine(DeleteSFXAfterTime(audioSource));
         }
-
     }
     private IEnumerator DeleteVFXAfterTime(GameObject vfx, float time)
     {
@@ -144,7 +151,8 @@ public class ADFeedbacks : MonoBehaviour
 
             _cameraShakeSettings.CameraShakeGO.transform.localPosition = originalPos;
         }
-
+        
     }
+    
 }
 
