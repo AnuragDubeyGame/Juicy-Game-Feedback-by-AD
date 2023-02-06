@@ -9,14 +9,24 @@ public class ADFeedbacks : MonoBehaviour
     [System.Serializable]
     public class CameraShakeSettings
     {
+        [Space]
+        public bool isCinemachineCamera;
+        [Space]
+        [Space]
         public GameObject CameraShakeGO;
         public float CameraShakeTime;
         public float CameraShakeIntensity;
-    }
+        [Header("Cinemachine")]
+        [Space]
+        public CinemachineVirtualCamera CinemachineCameraShakeGO;
+        public float CinemachineCameraShakeTime;
+        public float CinemachineCameraShakeIntensity;
 
+    }
     [System.Serializable]
     public class VFXSettings
     {
+        [Space]
         public GameObject VFXGO;
         public Transform VFXSpawnPosition;
         public Vector3 VFXSpawnOffset;
@@ -26,6 +36,7 @@ public class ADFeedbacks : MonoBehaviour
     [System.Serializable]
     public class SFXSettings
     {
+        [Space]
         public AudioClip SFXClip;
         [Range(0, 1)]
         public float SFXVolume;
@@ -65,7 +76,7 @@ public class ADFeedbacks : MonoBehaviour
     {
         if (CameraShake)
         {
-            StartCoroutine(ShakeCamera(_cameraShakeSettings.CameraShakeGO,_cameraShakeSettings.CameraShakeTime,_cameraShakeSettings.CameraShakeIntensity));
+            StartCoroutine(ShakeCamera(_cameraShakeSettings.CameraShakeGO, _cameraShakeSettings.CameraShakeTime, _cameraShakeSettings.CameraShakeIntensity));
         }
 
         if (VFX)
@@ -103,22 +114,37 @@ public class ADFeedbacks : MonoBehaviour
     }
     private IEnumerator ShakeCamera(GameObject go, float time, float intensity)
     {
-        Vector3 originalPos = go.transform.localPosition;
-        float elapsedTime = 0.0f;
-
-        while (elapsedTime < time)
+        if (_cameraShakeSettings.isCinemachineCamera)
         {
-            float x = UnityEngine.Random.Range(-2f, 2f) * intensity;
-            float y = UnityEngine.Random.Range(-2f, 2f) * intensity;
+            CinemachineBasicMultiChannelPerlin noise = _cameraShakeSettings.CinemachineCameraShakeGO.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
+            noise.m_AmplitudeGain = _cameraShakeSettings.CinemachineCameraShakeIntensity;
+            noise.m_FrequencyGain = 1f;
 
-            go.transform.localPosition = new Vector3(x, y, originalPos.z);
+            yield return new WaitForSeconds(_cameraShakeSettings.CinemachineCameraShakeTime);
 
-            elapsedTime += Time.deltaTime;
+            noise.m_AmplitudeGain = 0f;
+            noise.m_FrequencyGain = 0f;
+        }
+        else
+        {
+            Vector3 originalPos = _cameraShakeSettings.CameraShakeGO.transform.localPosition;
+            float elapsedTime = 0.0f;
 
-            yield return null;
+            while (elapsedTime < _cameraShakeSettings.CameraShakeTime)
+            {
+                float x = UnityEngine.Random.Range(-2f, 2f) * _cameraShakeSettings.CameraShakeIntensity;
+                float y = UnityEngine.Random.Range(-2f, 2f) * _cameraShakeSettings.CameraShakeIntensity;
+
+                _cameraShakeSettings.CameraShakeGO.transform.localPosition = new Vector3(x, y, originalPos.z);
+
+                elapsedTime += Time.deltaTime;
+
+                yield return null;
+            }
+
+            _cameraShakeSettings.CameraShakeGO.transform.localPosition = originalPos;
         }
 
-        go.transform.localPosition = originalPos;
     }
 }
 
