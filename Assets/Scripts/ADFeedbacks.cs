@@ -12,58 +12,58 @@ public class ADFeedbacks : MonoBehaviour
     public class CameraShakeSettings
     {
         [Space]
-        public bool isCinemachineCamera;
+        public bool isUsingCinemachineCamera;
         [Space]
-        public GameObject CameraShakeGO;
-        public float CameraShakeTime;
-        public float CameraShakeIntensity;
+        public GameObject cameraGameObject;
+        public float cameraShakeDuration;
+        public float cameraShakeIntensity;
         [Header("Cinemachine")]
         [Space]
-        public CinemachineVirtualCamera CinemachineCameraShakeGO;
-        public float CinemachineCameraShakeTime;
-        public float CinemachineCameraShakeIntensity;
+        public CinemachineVirtualCamera cinemachineCameraGameObject;
+        public float cinemachineCameraShakeDuration;
+        public float cinemachineCameraShakeIntensity;
 
     }
     [System.Serializable]
     public class VFXSettings
     {
         [Space]
-        public GameObject VFXGO;
-        public Transform VFXSpawnPosition;
-        public Vector3 VFXSpawnOffset;
-        public float VFXDeletionTime;
+        public GameObject vfxObject;
+        public Transform vfxSpawnPoint;
+        public Vector3 vfxSpawnOffset;
+        public float vfxExpirationTime;
     }
 
     [System.Serializable]
     public class SFXSettings
     {
         [Space]
-        public AudioClip SFXClip;
+        public AudioClip sfxClip;
         [Range(0, 1)]
-        public float SFXVolume;
-        public float SFXDeletionTime;
+        public float sfxVolume;
+        public float sfxExpirationTime;
     }
     [System.Serializable]
     public class PostProcessingSettings
     {
         [Space]
-        public Volume GlobalVolume;
+        public Volume globalVolume;
         [Space]
-        public VolumeProfile defaultEffect;
-        public VolumeProfile EffectToShow;
-        public float RemoveAfter;
+        public VolumeProfile defaultProfile;
+        public VolumeProfile activeProfile;
+        public float profileExpirationTime;
 
     }
-    public bool CameraShake;
+    public bool UseCameraShake;
     [SerializeField]
     private CameraShakeSettings _cameraShakeSettings;
-    public bool VFX;
+    public bool UseVFX;
     [SerializeField]
     private VFXSettings _vFXSettings;
-    public bool SFX;
+    public bool UseSFX;
     [SerializeField]
     private SFXSettings _sFXSettings;
-    public bool PostProcessing;
+    public bool UsePostProcessing;
     [SerializeField]
     private PostProcessingSettings _postProcessingSettings;
 
@@ -92,19 +92,19 @@ public class ADFeedbacks : MonoBehaviour
     private void Start()
     {
        
-        if (_postProcessingSettings.defaultEffect == null)
+        if (_postProcessingSettings.defaultProfile == null)
         {
             Debug.LogWarning("Postprocessing Default is null");
         }
         else
         {
-            if(_postProcessingSettings.GlobalVolume == null)
+            if(_postProcessingSettings.globalVolume == null)
             {
                 Debug.LogWarning("PostProcessing Volume is null");
             }
             else
             {
-                _postProcessingSettings.GlobalVolume.profile = _postProcessingSettings.defaultEffect;
+                _postProcessingSettings.globalVolume.profile = _postProcessingSettings.defaultProfile;
             }
         }
     }
@@ -116,26 +116,26 @@ public class ADFeedbacks : MonoBehaviour
         }
         else
         {
-            if (_cameraShakeSettings.isCinemachineCamera)
+            if (_cameraShakeSettings.isUsingCinemachineCamera)
             {
-                if (_cameraShakeSettings.CinemachineCameraShakeGO == null)
+                if (_cameraShakeSettings.cinemachineCameraGameObject == null)
                 {
                     Debug.LogWarning("Cinemachine Camera Shake Game Object is null.");
                 }
                 else
                 {
-                    _cameraShakeSettings.CinemachineCameraShakeGO.gameObject.SetActive(true);
+                    _cameraShakeSettings.cinemachineCameraGameObject.gameObject.SetActive(true);
                 }
             }
             else
             {
-                if (_cameraShakeSettings.CinemachineCameraShakeGO == null)
+                if (_cameraShakeSettings.cinemachineCameraGameObject == null)
                 {
                     Debug.LogWarning("Cinemachine Camera Shake Game Object is null.");
                 }
                 else
                 {
-                    _cameraShakeSettings.CinemachineCameraShakeGO.gameObject.SetActive(false);
+                    _cameraShakeSettings.cinemachineCameraGameObject.gameObject.SetActive(false);
                 }
             }
         }
@@ -143,16 +143,16 @@ public class ADFeedbacks : MonoBehaviour
     
     public void Play()
     {
-        if (CameraShake)
+        if (UseCameraShake)
         {
-            StartCoroutine(ShakeCamera(_cameraShakeSettings.CameraShakeGO, _cameraShakeSettings.CameraShakeTime, _cameraShakeSettings.CameraShakeIntensity));
+            StartCoroutine(ShakeCamera(_cameraShakeSettings.cameraGameObject, _cameraShakeSettings.cameraShakeDuration, _cameraShakeSettings.cameraShakeIntensity));
         }
-        if (VFX)
+        if (UseVFX)
         {
-            if(_vFXSettings.VFXGO == null)
+            if(_vFXSettings.vfxObject == null)
             {
                 Debug.LogWarning("VFX Gameobject is null");
-                if(_vFXSettings.VFXSpawnPosition == null)
+                if(_vFXSettings.vfxSpawnPoint == null)
                 {
                     Debug.LogWarning("VFX Spawn Position is null");
                 }
@@ -160,33 +160,33 @@ public class ADFeedbacks : MonoBehaviour
             else
             {
                 GameObject vfxInstance = Instantiate(
-                    _vFXSettings.VFXGO,
-                    _vFXSettings.VFXSpawnPosition.position + _vFXSettings.VFXSpawnOffset,
+                    _vFXSettings.vfxObject,
+                    _vFXSettings.vfxSpawnPoint.position + _vFXSettings.vfxSpawnOffset,
                     Quaternion.identity
                 );
-                StartCoroutine(DeleteVFXAfterTime(vfxInstance, _vFXSettings.VFXDeletionTime));
+                StartCoroutine(DeleteVFXAfterTime(vfxInstance, _vFXSettings.vfxExpirationTime));
             }
         }
-        if (SFX)
+        if (UseSFX)
         {
-            if (_sFXSettings.SFXClip == null)
+            if (_sFXSettings.sfxClip == null)
             {
                 Debug.LogWarning("SFX Clip is null");
             }
             else
             {
                 AudioSource audioSource = gameObject.AddComponent<AudioSource>();
-                audioSource.clip = _sFXSettings.SFXClip;
-                audioSource.volume = _sFXSettings.SFXVolume;
+                audioSource.clip = _sFXSettings.sfxClip;
+                audioSource.volume = _sFXSettings.sfxVolume;
                 audioSource.Play();
                 StartCoroutine(DeleteSFXAfterTime(audioSource));
             }
         }
-        if(PostProcessing)
+        if(UsePostProcessing)
         {
-            if(_postProcessingSettings.defaultEffect == null)
+            if(_postProcessingSettings.defaultProfile == null)
             {
-                if (_postProcessingSettings.EffectToShow == null)
+                if (_postProcessingSettings.activeProfile == null)
                 {
                     Debug.LogWarning("Postprocessing EffectToShow is null");
                 }
@@ -194,13 +194,13 @@ public class ADFeedbacks : MonoBehaviour
             }
             else
             {
-                if(_postProcessingSettings.GlobalVolume == null) 
+                if(_postProcessingSettings.globalVolume == null) 
                 {
                     Debug.LogWarning("Post Processing's Global Volume is null");
                 }
                 else
                 {
-                    _postProcessingSettings.GlobalVolume.profile = _postProcessingSettings.EffectToShow;
+                    _postProcessingSettings.globalVolume.profile = _postProcessingSettings.activeProfile;
                     StartCoroutine(RemoveEffect());
                 }
             }
@@ -221,7 +221,7 @@ public class ADFeedbacks : MonoBehaviour
 
     private IEnumerator DeleteSFXAfterTime(AudioSource audioSource)
     {
-        yield return new WaitForSeconds(_sFXSettings.SFXDeletionTime);
+        yield return new WaitForSeconds(_sFXSettings.sfxExpirationTime);
         if (audioSource != null)
         {
             Destroy(audioSource);
@@ -233,24 +233,24 @@ public class ADFeedbacks : MonoBehaviour
     }
     IEnumerator RemoveEffect()
     {
-        yield return new WaitForSeconds(_postProcessingSettings.RemoveAfter);
-        _postProcessingSettings.GlobalVolume.profile = _postProcessingSettings.defaultEffect;
+        yield return new WaitForSeconds(_postProcessingSettings.profileExpirationTime);
+        _postProcessingSettings.globalVolume.profile = _postProcessingSettings.defaultProfile;
     }
     private IEnumerator ShakeCamera(GameObject go, float time, float intensity)
     {
         if (_cameraShakeSettings != null)
         {
-            if (_cameraShakeSettings.isCinemachineCamera)
+            if (_cameraShakeSettings.isUsingCinemachineCamera)
             {
-                if (_cameraShakeSettings.CinemachineCameraShakeGO != null)
+                if (_cameraShakeSettings.cinemachineCameraGameObject != null)
                 {
-                    CinemachineBasicMultiChannelPerlin noise = _cameraShakeSettings.CinemachineCameraShakeGO.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
+                    CinemachineBasicMultiChannelPerlin noise = _cameraShakeSettings.cinemachineCameraGameObject.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
                     if (noise != null)
                     {
-                        noise.m_AmplitudeGain = _cameraShakeSettings.CinemachineCameraShakeIntensity;
+                        noise.m_AmplitudeGain = _cameraShakeSettings.cinemachineCameraShakeIntensity;
                         noise.m_FrequencyGain = 1f;
 
-                        yield return new WaitForSeconds(_cameraShakeSettings.CinemachineCameraShakeTime);
+                        yield return new WaitForSeconds(_cameraShakeSettings.cinemachineCameraShakeDuration);
 
                         noise.m_AmplitudeGain = 0f;
                         noise.m_FrequencyGain = 0f;
@@ -267,24 +267,24 @@ public class ADFeedbacks : MonoBehaviour
             }
             else
             {
-                if (_cameraShakeSettings.CameraShakeGO != null)
+                if (_cameraShakeSettings.cameraGameObject != null)
                 {
-                    Vector3 originalPos = _cameraShakeSettings.CameraShakeGO.transform.localPosition;
+                    Vector3 originalPos = _cameraShakeSettings.cameraGameObject.transform.localPosition;
                     float elapsedTime = 0.0f;
 
-                    while (elapsedTime < _cameraShakeSettings.CameraShakeTime)
+                    while (elapsedTime < _cameraShakeSettings.cameraShakeDuration)
                     {
-                        float x = UnityEngine.Random.Range(-2f, 2f) * _cameraShakeSettings.CameraShakeIntensity;
-                        float y = UnityEngine.Random.Range(-2f, 2f) * _cameraShakeSettings.CameraShakeIntensity;
+                        float x = UnityEngine.Random.Range(-1f, 1f) * _cameraShakeSettings.cameraShakeIntensity;
+                        float y = UnityEngine.Random.Range(-1f, 1f) * _cameraShakeSettings.cameraShakeIntensity;
 
-                        _cameraShakeSettings.CameraShakeGO.transform.localPosition = new Vector3(x, y, originalPos.z);
+                        _cameraShakeSettings.cameraGameObject.transform.localPosition = new Vector3(x, y, originalPos.z);
 
                         elapsedTime += Time.deltaTime;
 
                         yield return null;
                     }
 
-                    _cameraShakeSettings.CameraShakeGO.transform.localPosition = originalPos;
+                    _cameraShakeSettings.cameraGameObject.transform.localPosition = originalPos;
                 }
                 else
                 {

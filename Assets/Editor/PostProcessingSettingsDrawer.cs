@@ -8,7 +8,7 @@ public class PostProcessingSettingsDrawer : PropertyDrawer
     {
         // Get the parent object that holds the VFX boolean field
         SerializedObject parent = property.serializedObject;
-        SerializedProperty parentVFX = parent.FindProperty("PostProcessing");
+        SerializedProperty parentVFX = parent.FindProperty("UsePostProcessing");
 
         // Only display the VFXSettings field in the inspector if VFX is true
         if (parentVFX.boolValue)
@@ -20,7 +20,7 @@ public class PostProcessingSettingsDrawer : PropertyDrawer
     {
         // Get the parent object that holds the CameraShake boolean field
         SerializedObject parent = property.serializedObject;
-        SerializedProperty parentCameraShake = parent.FindProperty("PostProcessing");
+        SerializedProperty parentCameraShake = parent.FindProperty("UsePostProcessing");
 
         if (parentCameraShake.boolValue)
         {

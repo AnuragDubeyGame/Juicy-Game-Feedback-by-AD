@@ -8,7 +8,7 @@ public class CameraShakeSettingsDrawer : PropertyDrawer
     {
         // Get the parent object that holds the CameraShake boolean field
         SerializedObject parent = property.serializedObject;
-        SerializedProperty parentCameraShake = parent.FindProperty("CameraShake");
+        SerializedProperty parentCameraShake = parent.FindProperty("UseCameraShake");
 
         // Only display the CameraShakeSettings field in the inspector if CameraShake is true
         if (parentCameraShake.boolValue)
@@ -20,7 +20,7 @@ public class CameraShakeSettingsDrawer : PropertyDrawer
     {
         // Get the parent object that holds the CameraShake boolean field
         SerializedObject parent = property.serializedObject;
-        SerializedProperty parentCameraShake = parent.FindProperty("CameraShake");
+        SerializedProperty parentCameraShake = parent.FindProperty("UseCameraShake");
 
         if (parentCameraShake.boolValue)
         {

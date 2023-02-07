@@ -8,7 +8,7 @@ public class SFXSettingsDrawer : PropertyDrawer
     {
         // Get the parent object that holds the SFX boolean field
         SerializedObject parent = property.serializedObject;
-        SerializedProperty parentSFX = parent.FindProperty("SFX");
+        SerializedProperty parentSFX = parent.FindProperty("UseSFX");
 
         // Only display the SFXSettings field in the inspector if SFX is true
         if (parentSFX.boolValue)
@@ -20,7 +20,7 @@ public class SFXSettingsDrawer : PropertyDrawer
     {
         // Get the parent object that holds the CameraShake boolean field
         SerializedObject parent = property.serializedObject;
-        SerializedProperty parentCameraShake = parent.FindProperty("SFX");
+        SerializedProperty parentCameraShake = parent.FindProperty("UseSFX");
 
         if (parentCameraShake.boolValue)
         {

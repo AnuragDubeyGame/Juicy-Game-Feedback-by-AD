@@ -201,12 +201,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
-  m_LocalRotation: {x: 0.19229022, y: -0.25363824, z: 0.051523916, w: 0.9465925}
-  m_LocalPosition: {x: 3, y: 2.44, z: -4.75}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 436688829}
+  m_Father: {fileID: 470407084}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &330585547
@@ -369,7 +369,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 436688829}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
 --- !u!114 &410087042
 MonoBehaviour:
@@ -419,13 +419,44 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 330585546}
   - {fileID: 1897326543}
   - {fileID: 410087041}
   - {fileID: 832575519}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &470407083
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 470407084}
+  m_Layer: 0
+  m_Name: CameaHolder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &470407084
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 470407083}
+  m_LocalRotation: {x: 0.1205904, y: -0.37940884, z: 0.04995006, w: 0.915976}
+  m_LocalPosition: {x: 2.8839765, y: 1.9823624, z: -2.6339724}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 330585546}
+  m_Father: {fileID: 0}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 15, y: -45, z: 0}
 --- !u!1 &761528600
 GameObject:
   m_ObjectHideFlags: 0
@@ -438,7 +469,7 @@ GameObject:
   - component: {fileID: 761528603}
   - component: {fileID: 761528602}
   - component: {fileID: 761528601}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Plane
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -571,7 +602,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 436688829}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1011236323
 GameObject:
@@ -702,6 +733,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerjuice: {fileID: 2016561744}
   jumpForce: 15000
+  GroundLayer:
+    serializedVersion: 2
+    m_Bits: 64
+  maxDistance: 0.1
+  RayOriginOffset: {x: 0, y: -0.485, z: 0}
 --- !u!1 &1029652236
 GameObject:
   m_ObjectHideFlags: 0
@@ -910,15 +946,15 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1897326541}
-  m_LocalRotation: {x: 0.19229022, y: -0.25363824, z: 0.051523916, w: 0.9465925}
-  m_LocalPosition: {x: 3, y: 2.44, z: -4.75}
+  m_LocalRotation: {x: 0.1205904, y: -0.37940884, z: 0.04995006, w: 0.915976}
+  m_LocalPosition: {x: 2.8839765, y: 1.9823624, z: -2.6339724}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1306077454}
   m_Father: {fileID: 436688829}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 22.966, y: -30, z: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 15, y: -45, z: 0}
 --- !u!1 &1994985601
 GameObject:
   m_ObjectHideFlags: 0
@@ -995,29 +1031,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 144b6d5596bfbf54aa2c7231fff8ffe5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CameraShake: 1
+  UseCameraShake: 1
   _cameraShakeSettings:
-    isCinemachineCamera: 1
-    CameraShakeGO: {fileID: 330585543}
-    CameraShakeTime: 0.5
-    CameraShakeIntensity: 0.125
-    CinemachineCameraShakeGO: {fileID: 1897326542}
-    CinemachineCameraShakeTime: 0.5
-    CinemachineCameraShakeIntensity: 5
-  VFX: 1
+    isUsingCinemachineCamera: 1
+    cameraGameObject: {fileID: 330585543}
+    cameraShakeDuration: 0.1
+    cameraShakeIntensity: 0.1
+    cinemachineCameraGameObject: {fileID: 1897326542}
+    cinemachineCameraShakeDuration: 0.1
+    cinemachineCameraShakeIntensity: 1
+  UseVFX: 1
   _vFXSettings:
-    VFXGO: {fileID: 6196116214003933217, guid: 8f6b7d4bc1720f6429eeaee964a827e7, type: 3}
-    VFXSpawnPosition: {fileID: 1011236327}
-    VFXSpawnOffset: {x: 0, y: -1, z: 0}
-    VFXDeletionTime: 1
-  SFX: 1
+    vfxObject: {fileID: 6196116214003933217, guid: 8f6b7d4bc1720f6429eeaee964a827e7,
+      type: 3}
+    vfxSpawnPoint: {fileID: 1011236327}
+    vfxSpawnOffset: {x: 0, y: -0.5, z: 0}
+    vfxExpirationTime: 1
+  UseSFX: 1
   _sFXSettings:
-    SFXClip: {fileID: 8300000, guid: e2ecc27bf0405204a87fe3f4d41c6532, type: 3}
-    SFXVolume: 1
-    SFXDeletionTime: 1
-  PostProcessing: 1
+    sfxClip: {fileID: 8300000, guid: e2ecc27bf0405204a87fe3f4d41c6532, type: 3}
+    sfxVolume: 1
+    sfxExpirationTime: 1
+  UsePostProcessing: 1
   _postProcessingSettings:
-    GlobalVolume: {fileID: 832575518}
-    defaultEffect: {fileID: 11400000, guid: a6560a915ef98420e9faacc1c7438823, type: 2}
-    EffectToShow: {fileID: 11400000, guid: 09f4673eb95a0be469b715793e21ed4c, type: 2}
-    RemoveAfter: 0.5
+    globalVolume: {fileID: 832575518}
+    defaultProfile: {fileID: 11400000, guid: a6560a915ef98420e9faacc1c7438823, type: 2}
+    activeProfile: {fileID: 11400000, guid: 09f4673eb95a0be469b715793e21ed4c, type: 2}
+    profileExpirationTime: 1
