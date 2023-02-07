@@ -13,7 +13,8 @@ public class SFXSettingsDrawer : PropertyDrawer
         // Only display the SFXSettings field in the inspector if SFX is true
         if (parentSFX.boolValue)
         {
-            EditorGUI.PropertyField(position, property, label, true);
+            Rect offsetPosition = new Rect(position.x + 15, position.y, position.width, position.height);
+            EditorGUI.PropertyField(offsetPosition, property, label, true);
         }
     }
     public override float GetPropertyHeight(SerializedProperty property, GUIContent label)

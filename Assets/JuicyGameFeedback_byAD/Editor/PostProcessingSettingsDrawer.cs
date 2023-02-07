@@ -13,7 +13,8 @@ public class PostProcessingSettingsDrawer : PropertyDrawer
         // Only display the VFXSettings field in the inspector if VFX is true
         if (parentVFX.boolValue)
         {
-            EditorGUI.PropertyField(position, property, label, true);
+            Rect offsetPosition = new Rect(position.x + 15, position.y, position.width, position.height);
+            EditorGUI.PropertyField(offsetPosition, property, label, true);
         }
     }
     public override float GetPropertyHeight(SerializedProperty property, GUIContent label)

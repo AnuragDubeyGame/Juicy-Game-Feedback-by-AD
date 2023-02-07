@@ -5,6 +5,7 @@ using System.Collections;
 using Cinemachine;
 using UnityEngine.Rendering;
 using UnityEngine.Events;
+using static UnityEditor.PlayerSettings;
 
 [System.Serializable]
 public class FeedBack_Base : MonoBehaviour
@@ -60,6 +61,36 @@ public class FeedBack_Base : MonoBehaviour
     {
         public UnityEvent OnFeedbackTrigger;
     }
+    [System.Serializable]
+    public class TransformationSettings
+    {
+        [Space]
+        public GameObject GameObjectToAlter;
+        [Space]
+        public bool ShouldAlterPosition;
+        public bool ShouldAlterRotation;
+        public bool ShouldAlterScale;
+        [Space]
+        [Space]
+        public bool ShouldReversePosition;
+        public Vector3 AlterPosition;
+        public float AlterPositionDuration;
+        public AnimationCurve PositionAnimationCurve;
+        [Space]
+        [Space]
+        public bool ShouldReverseRotation;
+        public Vector3 AlterRotation;
+        public float AlterRotationDuration;
+        public AnimationCurve RotationAnimationCurve;
+        [Space]
+        [Space]
+        public bool ShouldReverseScale;
+        public Vector3 AlterScale;
+        public float AlterScaleDuration;
+        public AnimationCurve ScaleAnimationCurve;
+    }
+
+    [Space]
     public bool UseCameraShake;
     [SerializeField]
     private CameraShakeSettings _cameraShakeSettings;
@@ -75,7 +106,9 @@ public class FeedBack_Base : MonoBehaviour
     public bool UseEvents;
     [SerializeField]
     private TriggerEvent _unityEvents;
-
+    public bool UseTransformations;
+    [SerializeField]
+    private TransformationSettings _transformationSettings;
 
     public CameraShakeSettings cameraShakeSettings
     {
@@ -101,6 +134,11 @@ public class FeedBack_Base : MonoBehaviour
     {
         get { return _unityEvents; }
         set { _unityEvents = value; }
+    }
+    public TransformationSettings alterTransformation
+    {
+        get { return _transformationSettings; }
+        set { _transformationSettings = value; }
     }
     private void Start()
     {
@@ -216,7 +254,7 @@ public class FeedBack_Base : MonoBehaviour
                 else
                 {
                     _postProcessingSettings.globalVolume.profile = _postProcessingSettings.activeProfile;
-                    StartCoroutine(RemoveEffect());
+                    StartCoroutine(RemoveVolumeProfile());
                 }
             }
         }
@@ -224,7 +262,182 @@ public class FeedBack_Base : MonoBehaviour
         {
             _unityEvents.OnFeedbackTrigger?.Invoke();
         }
+        if(UseTransformations)
+        {
+            StartCoroutine(AlterPosition(_transformationSettings.AlterPosition, _transformationSettings.AlterPositionDuration, _transformationSettings.PositionAnimationCurve));
+            StartCoroutine(AlterRotation(_transformationSettings.AlterRotation, _transformationSettings.AlterRotationDuration, _transformationSettings.RotationAnimationCurve));
+            StartCoroutine(AlterScale(_transformationSettings.AlterScale, _transformationSettings.AlterScaleDuration, _transformationSettings.ScaleAnimationCurve));
+
+        }
     }
+    private IEnumerator AlterPosition(Vector3 pos, float Duration, AnimationCurve animCurve)
+    {
+        if (!_transformationSettings.ShouldAlterPosition)
+        {
+            yield return null;
+        }
+        else
+        {
+            if(_transformationSettings.GameObjectToAlter == null)
+            {
+                Debug.LogWarning("Transformation Setting's GameObject to Alter is null");
+                yield return null;
+            }
+            else
+            {
+                if (_transformationSettings.ShouldReversePosition)
+                {
+                    Vector3 startPos = _transformationSettings.GameObjectToAlter.transform.localPosition;
+                    float startTime = Time.time;
+
+                    while (Time.time - startTime <= Duration / 2)
+                    {
+                        float t = (Time.time - startTime) / (Duration / 2);
+                        _transformationSettings.GameObjectToAlter.transform.localPosition = Vector3.Lerp(startPos, pos, animCurve.Evaluate(t));
+                        yield return null;
+                    }
+
+                    float returnStartTime = Time.time;
+
+                    while (Time.time - returnStartTime <= Duration / 2)
+                    {
+                        float t = (Time.time - returnStartTime) / (Duration / 2);
+                        _transformationSettings.GameObjectToAlter.transform.localPosition = Vector3.Lerp(pos, startPos, animCurve.Evaluate(t));
+                        yield return null;
+                    }
+
+                    _transformationSettings.GameObjectToAlter.transform.localPosition = startPos;
+                }
+                else
+                {
+                    Vector3 startPos = _transformationSettings.GameObjectToAlter.transform.localPosition;
+                    float startTime = Time.time;
+
+                    while (Time.time - startTime <= Duration)
+                    {
+                        float t = (Time.time - startTime) / Duration;
+                        _transformationSettings.GameObjectToAlter.transform.localPosition = Vector3.Lerp(startPos, pos, animCurve.Evaluate(t));
+                        yield return null;
+                    }
+
+                    _transformationSettings.GameObjectToAlter.transform.localPosition = startPos;
+                }
+            }
+        }
+    }
+    private IEnumerator AlterScale(Vector3 scale, float Duration, AnimationCurve animCurve)
+    {
+        if (!_transformationSettings.ShouldAlterScale)
+        {
+            yield return null;
+        }
+        else
+        {
+            if (_transformationSettings.GameObjectToAlter == null)
+            {
+                Debug.LogWarning("Transformation Setting's GameObject to Alter is null");
+                yield return null;
+            }
+            else
+            {
+                if (_transformationSettings.ShouldReverseScale)
+                {
+                    Vector3 startScale = _transformationSettings.GameObjectToAlter.transform.localScale;
+                    float startTime = Time.time;
+
+                    while (Time.time - startTime <= Duration / 2)
+                    {
+                        float t = (Time.time - startTime) / (Duration / 2);
+                        _transformationSettings.GameObjectToAlter.transform.localScale = Vector3.Lerp(startScale, scale, animCurve.Evaluate(t));
+                        yield return null;
+                    }
+
+                    float returnStartTime = Time.time;
+
+                    while (Time.time - returnStartTime <= Duration / 2)
+                    {
+                        float t = (Time.time - returnStartTime) / (Duration / 2);
+                        _transformationSettings.GameObjectToAlter.transform.localScale = Vector3.Lerp(scale, startScale, animCurve.Evaluate(t));
+                        yield return null;
+                    }
+
+                    _transformationSettings.GameObjectToAlter.transform.localScale = startScale;
+                }
+                else
+                {
+                    Vector3 startScale = _transformationSettings.GameObjectToAlter.transform.localScale;
+                    float startTime = Time.time;
+
+                    while (Time.time - startTime <= Duration)
+                    {
+                        float t = (Time.time - startTime) / (Duration);
+                        _transformationSettings.GameObjectToAlter.transform.localScale = Vector3.Lerp(startScale, scale, animCurve.Evaluate(t));
+                        yield return null;
+                    }
+
+                    _transformationSettings.GameObjectToAlter.transform.localScale = startScale;
+                }
+            }
+        }
+    }
+    private IEnumerator AlterRotation(Vector3 rot, float Duration, AnimationCurve animCurve)
+    {
+        if (!_transformationSettings.ShouldAlterRotation)
+        {
+            yield return null;
+        }
+        else
+        {
+            if (_transformationSettings.GameObjectToAlter == null) 
+            {
+                Debug.LogWarning("Transformation Setting's GameObject to Alter is null");
+                yield return null;
+            }
+            else
+            {
+                if (_transformationSettings.ShouldReverseRotation)
+                {
+                    Vector3 startPos = _transformationSettings.GameObjectToAlter.transform.localEulerAngles;
+                    float startTime = Time.time;
+
+                    while (Time.time - startTime <= Duration / 2)
+                    {
+                        float t = (Time.time - startTime) / (Duration / 2);
+                        _transformationSettings.GameObjectToAlter.transform.localEulerAngles = Vector3.Lerp(startPos, rot, animCurve.Evaluate(t));
+                        yield return null;
+                    }
+
+                    float returnStartTime = Time.time;
+
+                    while (Time.time - returnStartTime <= Duration / 2)
+                    {
+                        float t = (Time.time - returnStartTime) / (Duration / 2);
+                        _transformationSettings.GameObjectToAlter.transform.localEulerAngles = Vector3.Lerp(rot, startPos, animCurve.Evaluate(t));
+                        yield return null;
+                    }
+
+                    _transformationSettings.GameObjectToAlter.transform.localEulerAngles = startPos;
+                }
+                else
+                {
+                    Vector3 startRot = _transformationSettings.GameObjectToAlter.transform.localEulerAngles;
+                    float startTime = Time.time;
+
+                    while (Time.time - startTime <= Duration)
+                    {
+                        float t = (Time.time - startTime) / (Duration);
+                        _transformationSettings.GameObjectToAlter.transform.localEulerAngles = Vector3.Lerp(startRot, rot, animCurve.Evaluate(t));
+                        yield return null;
+                    }
+
+                    _transformationSettings.GameObjectToAlter.transform.localEulerAngles = startRot;
+
+                }
+        
+            }
+        }
+    }
+
     private IEnumerator DeleteVFXAfterTime(GameObject vfx, float time)
     {
         yield return new WaitForSeconds(time);
@@ -250,7 +463,7 @@ public class FeedBack_Base : MonoBehaviour
             Debug.LogWarning("Cant Delete coz spawned audiosource is null");
         }
     }
-    IEnumerator RemoveEffect()
+    IEnumerator RemoveVolumeProfile()
     {
         yield return new WaitForSeconds(_postProcessingSettings.profileExpirationTime);
         _postProcessingSettings.globalVolume.profile = _postProcessingSettings.defaultProfile;

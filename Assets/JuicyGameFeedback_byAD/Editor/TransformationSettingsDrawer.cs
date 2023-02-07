@@ -1,14 +1,14 @@
 using UnityEditor;
 using UnityEngine;
 
-[CustomPropertyDrawer(typeof(FeedBack_Base.TriggerEvent))]
-public class UnityEventsSettingsDrawer : PropertyDrawer
+[CustomPropertyDrawer(typeof(FeedBack_Base.TransformationSettings))]
+public class TransformationSettingsDrawer : PropertyDrawer
 {
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
     {
         // Get the parent object that holds the VFX boolean field
         SerializedObject parent = property.serializedObject;
-        SerializedProperty parentVFX = parent.FindProperty("UseEvents");
+        SerializedProperty parentVFX = parent.FindProperty("UseTransformations");
 
         // Only display the VFXSettings field in the inspector if VFX is true
         if (parentVFX.boolValue)
@@ -21,7 +21,7 @@ public class UnityEventsSettingsDrawer : PropertyDrawer
     {
         // Get the parent object that holds the CameraShake boolean field
         SerializedObject parent = property.serializedObject;
-        SerializedProperty parentCameraShake = parent.FindProperty("UseEvents");
+        SerializedProperty parentCameraShake = parent.FindProperty("UseTransformations");
 
         if (parentCameraShake.boolValue)
         {
@@ -33,3 +33,4 @@ public class UnityEventsSettingsDrawer : PropertyDrawer
         }
     }
 }
+

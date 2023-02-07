@@ -13,7 +13,8 @@ public class CameraShakeSettingsDrawer : PropertyDrawer
         // Only display the CameraShakeSettings field in the inspector if CameraShake is true
         if (parentCameraShake.boolValue)
         {
-            EditorGUI.PropertyField(position, property, label, true);
+            Rect offsetPosition = new Rect(position.x + 15, position.y, position.width, position.height);
+            EditorGUI.PropertyField(offsetPosition, property, label, true);
         }
     }
     public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
