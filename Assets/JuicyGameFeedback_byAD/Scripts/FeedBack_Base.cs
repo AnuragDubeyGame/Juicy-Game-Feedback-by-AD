@@ -1,13 +1,14 @@
 using System;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using System.Collections;
 using Cinemachine;
 using UnityEngine.Rendering;
+using UnityEngine.Events;
 
 [System.Serializable]
-public class ADFeedbacks : MonoBehaviour
+public class FeedBack_Base : MonoBehaviour
 {
-    
     [System.Serializable]
     public class CameraShakeSettings
     {
@@ -54,6 +55,11 @@ public class ADFeedbacks : MonoBehaviour
         public float profileExpirationTime;
 
     }
+    [System.Serializable]
+    public class TriggerEvent
+    {
+        public UnityEvent OnFeedbackTrigger;
+    }
     public bool UseCameraShake;
     [SerializeField]
     private CameraShakeSettings _cameraShakeSettings;
@@ -66,19 +72,21 @@ public class ADFeedbacks : MonoBehaviour
     public bool UsePostProcessing;
     [SerializeField]
     private PostProcessingSettings _postProcessingSettings;
+    public bool UseEvents;
+    [SerializeField]
+    private TriggerEvent _unityEvents;
+
 
     public CameraShakeSettings cameraShakeSettings
     {
         get { return _cameraShakeSettings; }
         set { _cameraShakeSettings = value; }
     }
-
     public VFXSettings vFXSettings
     {
         get { return _vFXSettings; }
         set { _vFXSettings = value; }
     }
-
     public SFXSettings sFXSettings
     {
         get { return _sFXSettings; }
@@ -89,9 +97,13 @@ public class ADFeedbacks : MonoBehaviour
         get { return _postProcessingSettings; }
         set { _postProcessingSettings = value; }
     }
+    public TriggerEvent triggerEvents
+    {
+        get { return _unityEvents; }
+        set { _unityEvents = value; }
+    }
     private void Start()
     {
-       
         if (_postProcessingSettings.defaultProfile == null)
         {
             Debug.LogWarning("Postprocessing Default is null");
@@ -149,22 +161,25 @@ public class ADFeedbacks : MonoBehaviour
         }
         if (UseVFX)
         {
-            if(_vFXSettings.vfxObject == null)
+            if(_vFXSettings.vfxSpawnPoint == null)
             {
-                Debug.LogWarning("VFX Gameobject is null");
-                if(_vFXSettings.vfxSpawnPoint == null)
-                {
-                    Debug.LogWarning("VFX Spawn Position is null");
-                }
+                Debug.LogWarning("VFX Spawn Position is null");
             }
             else
             {
-                GameObject vfxInstance = Instantiate(
-                    _vFXSettings.vfxObject,
-                    _vFXSettings.vfxSpawnPoint.position + _vFXSettings.vfxSpawnOffset,
-                    Quaternion.identity
-                );
-                StartCoroutine(DeleteVFXAfterTime(vfxInstance, _vFXSettings.vfxExpirationTime));
+                if (_vFXSettings.vfxObject == null)
+                {
+                    Debug.LogWarning("VFX Gameobject is null");
+                }
+                else
+                {
+                        GameObject vfxInstance = Instantiate(
+                        _vFXSettings.vfxObject,
+                        _vFXSettings.vfxSpawnPoint.position + _vFXSettings.vfxSpawnOffset,
+                        Quaternion.identity
+                    );
+                    StartCoroutine(DeleteVFXAfterTime(vfxInstance, _vFXSettings.vfxExpirationTime));
+                }
             }
         }
         if (UseSFX)
@@ -204,6 +219,10 @@ public class ADFeedbacks : MonoBehaviour
                     StartCoroutine(RemoveEffect());
                 }
             }
+        }
+        if (UseEvents)
+        {
+            _unityEvents.OnFeedbackTrigger?.Invoke();
         }
     }
     private IEnumerator DeleteVFXAfterTime(GameObject vfx, float time)

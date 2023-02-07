@@ -1,17 +1,17 @@
 using UnityEditor;
 using UnityEngine;
 
-[CustomPropertyDrawer(typeof(ADFeedbacks.CameraShakeSettings))]
-public class CameraShakeSettingsDrawer : PropertyDrawer
+[CustomPropertyDrawer(typeof(FeedBack_Base.SFXSettings))]
+public class SFXSettingsDrawer : PropertyDrawer
 {
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
     {
-        // Get the parent object that holds the CameraShake boolean field
+        // Get the parent object that holds the SFX boolean field
         SerializedObject parent = property.serializedObject;
-        SerializedProperty parentCameraShake = parent.FindProperty("UseCameraShake");
+        SerializedProperty parentSFX = parent.FindProperty("UseSFX");
 
-        // Only display the CameraShakeSettings field in the inspector if CameraShake is true
-        if (parentCameraShake.boolValue)
+        // Only display the SFXSettings field in the inspector if SFX is true
+        if (parentSFX.boolValue)
         {
             EditorGUI.PropertyField(position, property, label, true);
         }
@@ -20,7 +20,7 @@ public class CameraShakeSettingsDrawer : PropertyDrawer
     {
         // Get the parent object that holds the CameraShake boolean field
         SerializedObject parent = property.serializedObject;
-        SerializedProperty parentCameraShake = parent.FindProperty("UseCameraShake");
+        SerializedProperty parentCameraShake = parent.FindProperty("UseSFX");
 
         if (parentCameraShake.boolValue)
         {
@@ -32,3 +32,4 @@ public class CameraShakeSettingsDrawer : PropertyDrawer
         }
     }
 }
+

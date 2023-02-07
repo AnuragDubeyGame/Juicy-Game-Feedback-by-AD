@@ -1,17 +1,17 @@
 using UnityEditor;
 using UnityEngine;
 
-[CustomPropertyDrawer(typeof(ADFeedbacks.SFXSettings))]
-public class SFXSettingsDrawer : PropertyDrawer
+[CustomPropertyDrawer(typeof(FeedBack_Base.PostProcessingSettings))]
+public class PostProcessingSettingsDrawer : PropertyDrawer
 {
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
     {
-        // Get the parent object that holds the SFX boolean field
+        // Get the parent object that holds the VFX boolean field
         SerializedObject parent = property.serializedObject;
-        SerializedProperty parentSFX = parent.FindProperty("UseSFX");
+        SerializedProperty parentVFX = parent.FindProperty("UsePostProcessing");
 
-        // Only display the SFXSettings field in the inspector if SFX is true
-        if (parentSFX.boolValue)
+        // Only display the VFXSettings field in the inspector if VFX is true
+        if (parentVFX.boolValue)
         {
             EditorGUI.PropertyField(position, property, label, true);
         }
@@ -20,7 +20,7 @@ public class SFXSettingsDrawer : PropertyDrawer
     {
         // Get the parent object that holds the CameraShake boolean field
         SerializedObject parent = property.serializedObject;
-        SerializedProperty parentCameraShake = parent.FindProperty("UseSFX");
+        SerializedProperty parentCameraShake = parent.FindProperty("UsePostProcessing");
 
         if (parentCameraShake.boolValue)
         {

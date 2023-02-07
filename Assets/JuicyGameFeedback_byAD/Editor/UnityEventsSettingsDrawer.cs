@@ -1,14 +1,14 @@
 using UnityEditor;
 using UnityEngine;
 
-[CustomPropertyDrawer(typeof(ADFeedbacks.VFXSettings))]
-public class VFXSettingsDrawer : PropertyDrawer
+[CustomPropertyDrawer(typeof(FeedBack_Base.TriggerEvent))]
+public class UnityEventsSettingsDrawer : PropertyDrawer
 {
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
     {
         // Get the parent object that holds the VFX boolean field
         SerializedObject parent = property.serializedObject;
-        SerializedProperty parentVFX = parent.FindProperty("UseVFX");
+        SerializedProperty parentVFX = parent.FindProperty("UseEvents");
 
         // Only display the VFXSettings field in the inspector if VFX is true
         if (parentVFX.boolValue)
@@ -20,7 +20,7 @@ public class VFXSettingsDrawer : PropertyDrawer
     {
         // Get the parent object that holds the CameraShake boolean field
         SerializedObject parent = property.serializedObject;
-        SerializedProperty parentCameraShake = parent.FindProperty("UseVFX");
+        SerializedProperty parentCameraShake = parent.FindProperty("UseEvents");
 
         if (parentCameraShake.boolValue)
         {

@@ -1,17 +1,17 @@
 using UnityEditor;
 using UnityEngine;
 
-[CustomPropertyDrawer(typeof(ADFeedbacks.PostProcessingSettings))]
-public class PostProcessingSettingsDrawer : PropertyDrawer
+[CustomPropertyDrawer(typeof(FeedBack_Base.CameraShakeSettings))]
+public class CameraShakeSettingsDrawer : PropertyDrawer
 {
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
     {
-        // Get the parent object that holds the VFX boolean field
+        // Get the parent object that holds the CameraShake boolean field
         SerializedObject parent = property.serializedObject;
-        SerializedProperty parentVFX = parent.FindProperty("UsePostProcessing");
+        SerializedProperty parentCameraShake = parent.FindProperty("UseCameraShake");
 
-        // Only display the VFXSettings field in the inspector if VFX is true
-        if (parentVFX.boolValue)
+        // Only display the CameraShakeSettings field in the inspector if CameraShake is true
+        if (parentCameraShake.boolValue)
         {
             EditorGUI.PropertyField(position, property, label, true);
         }
@@ -20,7 +20,7 @@ public class PostProcessingSettingsDrawer : PropertyDrawer
     {
         // Get the parent object that holds the CameraShake boolean field
         SerializedObject parent = property.serializedObject;
-        SerializedProperty parentCameraShake = parent.FindProperty("UsePostProcessing");
+        SerializedProperty parentCameraShake = parent.FindProperty("UseCameraShake");
 
         if (parentCameraShake.boolValue)
         {
@@ -32,4 +32,3 @@ public class PostProcessingSettingsDrawer : PropertyDrawer
         }
     }
 }
-
