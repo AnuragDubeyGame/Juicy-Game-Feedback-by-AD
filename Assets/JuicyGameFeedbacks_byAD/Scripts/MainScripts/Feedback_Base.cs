@@ -146,19 +146,22 @@ public class Feedback_Base : MonoBehaviour
     #endregion
     private void Start()
     {
-        if (_postProcessingSettings.defaultProfile == null)
+        if (UsePostProcessing)
         {
-            Debug.LogWarning("Postprocessing Default is null");
-        }
-        else
-        {
-            if(_postProcessingSettings.globalVolume == null)
+            if (_postProcessingSettings.defaultProfile == null)
             {
-                Debug.LogWarning("PostProcessing Volume is null");
+                Debug.LogWarning("Postprocessing Default is null");
             }
             else
             {
-                _postProcessingSettings.globalVolume.profile = _postProcessingSettings.defaultProfile;
+                if (_postProcessingSettings.globalVolume == null)
+                {
+                    Debug.LogWarning("PostProcessing Volume is null");
+                }
+                else
+                {
+                    _postProcessingSettings.globalVolume.profile = _postProcessingSettings.defaultProfile;
+                }
             }
         }
     }
@@ -168,7 +171,7 @@ public class Feedback_Base : MonoBehaviour
         {
             if (_cameraShakeSettings.cinemachineCameraGameObject == null)
             {
-                Debug.LogWarning("Cinemachine Camera Shake Game Object is null.");
+                //Debug.LogWarning("Cinemachine Camera Shake Game Object is null.");
             }
             else
             {
@@ -179,7 +182,7 @@ public class Feedback_Base : MonoBehaviour
         {
             if (_cameraShakeSettings.cinemachineCameraGameObject == null)
             {
-                Debug.LogWarning("Cinemachine Camera Shake Game Object is null.");
+                //Debug.LogWarning("Cinemachine Camera Shake Game Object is null.");
             }
             else
             {
