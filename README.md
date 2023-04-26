@@ -6,10 +6,15 @@ https://user-images.githubusercontent.com/124233582/226105742-aa02f56a-ea01-4dc9
 
 ## Features:
 📹 Shaking Camera: Bring intense moments to life by shaking the camera using either the Unity default camera or the Cinemachine virtual camera.<br>
+
 💥 VFX Explosions: Ignite the senses with stunning visual effects that explode onto the scene.<br>
+
 🔊 Music and Sound Effects: Immerse players in the world with pulse-pounding music and sound effects that elevate the action.<br>
+
 🌈 Stunning Visuals: Transform your game's look with new post-processing profiles that make your world come alive.<br>
+
 ⚡ Dynamic Events: Trigger dramatic events that keep players on the edge of their seats and drive the action forward.<br>
+
 🕺 Animated Action: Make your game come to life with smooth animations that alter the position, rotation, and scale of objects.<br>
 
 With these features, you can create games that are visually stunning, emotionally engaging, and unforgettable!
