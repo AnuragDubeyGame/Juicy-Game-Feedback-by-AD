@@ -3,6 +3,7 @@ This powerful tool gives game developers the ability to quickly add a range of g
 No more fussing with complex scripting, as this tool has a custom inspector that makes it easy to add and remove feedbacks from your game with ease.
 
 🎉🎊 With the following features, you can create games that are visually stunning, emotionally engaging, and unforgettable! 🎉🎊
+
 https://user-images.githubusercontent.com/124233582/226105742-aa02f56a-ea01-4dc9-b355-d9fc849dbc5d.mp4
 
 ## Features:
